@@ -13,7 +13,7 @@ var httpClient = &http.Client{Timeout: 10 * time.Second}
 func ReloadAlertmanager() error {
 	logrus.Infof("reload alertmanager...")
 
-	resp, err := http.Post("http://alertmanager:9093/-/reload", "text/html", nil)
+	resp, err := http.Post("http://localhost:9093/-/reload", "text/html", nil)
 	if err != nil {
 		return err
 	}

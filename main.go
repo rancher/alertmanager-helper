@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/rancher/fluentd-helper/watcher"
+	"github.com/rancher/alertmanager-helper/watcher"
 	"github.com/urfave/cli"
 )
 

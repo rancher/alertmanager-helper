@@ -16,9 +16,9 @@ if echo $TAG | grep -q dirty; then
     TAG=dev
 fi
 
-cp ../bin/fluentd-helper .
+cp ../bin/alertmanager-helper .
 
-IMAGE=${REPO}/fluentd-helper:${TAG}
+IMAGE=${REPO}/alertmanager-helper:${TAG}
 docker build -t ${IMAGE} .
 echo ${IMAGE} > ../dist/images
 echo Built ${IMAGE}

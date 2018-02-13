@@ -24,7 +24,9 @@ func Watcherfile(path string, done <-chan int) {
 					watcher.Remove(event.Name)
 					watcher.Add(event.Name)
 					logrus.Infof("receive file event: %#v, %#v", event.Name, event.Op.String())
-					helper.ReloadAlertmanager()
+					if err := helper.ReloadAlertmanager(); err != nil {
+						logrus.Errorf("Failed to reload : %v", err)
+					}
 				}
 
 				// watch for errors
