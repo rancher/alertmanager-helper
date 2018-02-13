@@ -1,4 +1,4 @@
-fluentd-helper
+alertmanager-helper
 ========
 
 Reloads alertmanager based on configuration files
