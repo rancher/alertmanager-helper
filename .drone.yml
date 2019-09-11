@@ -1,29 +1,50 @@
 ---
-pipeline:
-  build:
-    privileged: true
-    image: rancher/dapper:1.11.2
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    commands:
-    - dapper ci
+kind: pipeline
+name: default
 
-  stage-binaries:
-    image: rancher/dapper:1.11.2
-    commands:
-    - cp -r ./bin/* ./package/
-    when:
-      branch: master
-      event: tag
+platform:
+  os: linux
+  arch: amd64
 
+steps:
+- name: build
+  image: rancher/dapper:1.11.2
+  commands:
+  - dapper ci
+  privileged: true
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
 
-  publish-image:
-    image: plugins/docker
+- name: stage-binaries
+  image: rancher/dapper:1.11.2
+  commands:
+  - cp -r ./bin/* ./package/
+  when:
+    branch:
+    - master
+    event:
+    - tag
+
+- name: publish-image
+  image: plugins/docker
+  settings:
+    context: package/
     dockerfile: package/Dockerfile
     repo: rancher/alertmanager-helper
-    context: package/
     tag: ${DRONE_TAG}
-    secrets: [docker_username, docker_password]
-    when:
-      branch: master
-      event: tag
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  when:
+    branch:
+    - master
+    event:
+    - tag
+
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock
